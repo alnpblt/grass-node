@@ -22,8 +22,9 @@ const parseProxy = (proxy) => {
 const sleep = (sec) => new Promise(resolve => setTimeout(resolve, (sec * 1000)));
 
 const runProcess = async (userId, proxy = undefined) => {
+  let deviceId = uuid();
   let client = undefined;
-  while (client === undefined || (client !== undefined && !client?._connection?.connected)) {
+  while (client === undefined || (client !== undefined && client?._readyState === 3)) {
     console.log(`[BOT:${userId}] connecting...`);
     let sendPing = undefined;
     client = new WebSocket(url, proxy !== undefined ? {agent: new SocksProxyAgent(proxy)} : undefined);
@@ -37,7 +38,7 @@ const runProcess = async (userId, proxy = undefined) => {
     client.on('close', (e) => {
       console.log(`[BOT:${userId}] connection closed`);
       clearInterval(sendPing);
-      console.log(`[BOT:${userId}] ${client._closeMessage.toString()}`);
+      console.log(`[BOT:${userId}] ${client?._closeMessage?.toString() ?? ''}`);
     });
 
     client.on('open', (e) => {
@@ -53,7 +54,7 @@ const runProcess = async (userId, proxy = undefined) => {
           sendPing = setInterval(() => {
             try{
               const pingPayload = JSON.stringify({id: uuid(), version: "1.0.0", action: 'PING', data: {}});
-              // console.info(`[PING:${userId}] ${pingPayload}`);
+              console.info(`[PING:${userId}] ${pingPayload}`);
               client.send(pingPayload);
             }catch(error){
               console.log(`[BOT:${userId}] ${error}`);
@@ -65,7 +66,7 @@ const runProcess = async (userId, proxy = undefined) => {
             id: response.id,
             origin_action: "AUTH",
             result: {
-                browser_id: uuid(),
+                browser_id: deviceId,
                 user_id: userId,
                 user_agent: userAgent,
                 timestamp: Number(Date.now()),
@@ -82,6 +83,7 @@ const runProcess = async (userId, proxy = undefined) => {
         }
       } catch (error){
         client.close();
+        client = undefined;
         clearInterval(sendPing);
         console.error(`[BOT:${userId}] ${error}`);
       }
