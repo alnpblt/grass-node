@@ -1,28 +1,20 @@
-import websocket  from 'websocket'; 
+import {WebSocket}  from 'ws'; 
 import {v4 as uuid} from 'uuid';
-import {ProxyAgent} from 'proxy-agent';
+import { SocksProxyAgent } from 'socks-proxy-agent';
+import data from './data.json' assert {type: 'json'};
 
-const userIds = [
-  '2fJH56IUPmvAwz6OKWWXMtI9qKB',
-  '2fJHySZRK1ZvB6xA1F9KkITVFsh',
-  '2fRGg2guHfCMmA7ippJFoNkGqEx',
-  '2fRGxMCiWrQ0qraZmJs0GVEmOWc',
-  '2fRH8UGk48yCVG5z6siHYuUkTrW',
-  '2fRHLP5cEwkr9I7pzW0EJrOcpdA',
-  '2fRHl8b7F3Q3OVtbqMfI1XuYYdX',
-];
+const userIds = data.userIds;
 const proxy = [];
-
 const userAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36';
 const url = 'wss://proxy.wynd.network:4650/';
 
 const parseProxy = (proxy) => {
-  const [protocol, conn] = proxy.split('://');
+  const [protocol, conn] = proxy.split('//');
   const [username, password, host, port] = conn.split(':');
   return {
     protocol: protocol,
     hostname: host,
-    port: port,
+    port: Number(port),
     auth: `${username}:${password}`
   };
 }
@@ -30,33 +22,32 @@ const parseProxy = (proxy) => {
 const sleep = (sec) => new Promise(resolve => setTimeout(resolve, (sec * 1000)));
 
 const runProcess = async (userId, proxy = undefined) => {
-  let running = false;
   let client = undefined;
   while (client === undefined || (client !== undefined && !client?._connection?.connected)) {
     console.log(`[BOT:${userId}] connecting...`);
     let sendPing = undefined;
-    client = new websocket.w3cwebsocket(url, undefined, undefined, undefined, undefined, proxy !== undefined ? {
-      agent: new ProxyAgent(parseProxy(proxy))
-    } : undefined);
+    client = new WebSocket(url, proxy !== undefined ? {agent: new SocksProxyAgent(proxy)} : undefined);
 
-    client.onerror = (e) => {
+    client.on('error', (e) => {
       console.log(`[BOT:${userId}] stopped on error`);
       clearInterval(sendPing);
-    }
+      client.close();
+    });
 
-    client.onclose = (e) => {
+    client.on('close', (e) => {
       console.log(`[BOT:${userId}] connection closed`);
       clearInterval(sendPing);
-      console.log(`[BOT:${userId}] ${e.reason}`);
-    }
+      console.log(`[BOT:${userId}] ${client._closeMessage.toString()}`);
+    });
 
-    client.onopen = (e) => {
+    client.on('open', (e) => {
       console.log(`[BOT:${userId}] connected`);
-    }
+      // client.close(); // uncomment this line when you received an error regarding reached device limit to force close the connection
+    });
 
-    client.onmessage = (e) => {
+    client.on('message', function message(data) {
       try{
-        const response = JSON.parse(e.data);
+        const response = JSON.parse(data.toString());
         // console.info(`[RCV:${userId}] ${e.data}`);
         if(response.action === 'AUTH'){
           sendPing = setInterval(() => {
@@ -79,12 +70,11 @@ const runProcess = async (userId, proxy = undefined) => {
                 user_agent: userAgent,
                 timestamp: Number(Date.now()),
                 device_type: "extension",
-                version: "2.5.0"
+                version: "4.0.1"
             }
           });
           // console.info(`[AUTH:${userId}] ${authPayload}`);
           client.send(authPayload);
-          
         } else if(response.action === 'PONG'){
           const pongPayload = JSON.stringify({id: response.id, origin_action: 'PONG'});
           // console.info(`[PONG:${userId}] ${pongPayload}`);
@@ -95,9 +85,9 @@ const runProcess = async (userId, proxy = undefined) => {
         clearInterval(sendPing);
         console.error(`[BOT:${userId}] ${error}`);
       }
-    };
+    });
     
-    await sleep(30)
+    await sleep(30);
   }
 }
 
