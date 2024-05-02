@@ -4,7 +4,7 @@ import { SocksProxyAgent } from 'socks-proxy-agent';
 import data from './data.json' assert {type: 'json'};
 
 const userIds = data.userIds;
-const proxy = [];
+const proxy = data.proxies;
 const userAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36';
 const url = 'wss://proxy.wynd.network:4650/';
 
