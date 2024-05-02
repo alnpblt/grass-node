@@ -42,7 +42,7 @@ const runProcess = async (userId, proxy = undefined) => {
 
     client.on('open', (e) => {
       console.log(`[BOT:${userId}] connected`);
-      client.close(); // uncomment this line when you received an error regarding reached device limit to force close the connection
+      // client.close(); // uncomment this line when you received an error regarding reached device limit to force close the connection
     });
 
     client.on('message', function message(data) {
