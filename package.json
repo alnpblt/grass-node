@@ -1,0 +1,26 @@
+{
+  "name": "grass",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Cli version for grass",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "run": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alnpblt/grass-node.git"
+  },
+  "author": "Allen Poblete",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/alnpblt/grass-node/issues"
+  },
+  "homepage": "https://github.com/alnpblt/grass-node#readme",
+  "dependencies": {
+    "proxy-agent": "^6.4.0",
+    "uuid": "^9.0.1",
+    "websocket": "^1.0.34"
+  }
+}
