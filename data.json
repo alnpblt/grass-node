@@ -10,8 +10,8 @@
   ],
   "proxies2": [],
   "proxies": [
-    "socks5://xvzujnavbogxtpybzc-session-fimjlrkg-package-residential:ptjwvueozvuzhjgjuu@resi.proxies.fo:1338",
-    "socks5://xvzujnavbogxtpybzc-session-ut9ogdq1-package-residential:ptjwvueozvuzhjgjuu@resi.proxies.fo:1338",
-    "socks5://xvzujnavbogxtpybzc-session-r1wfqkok-package-residential:ptjwvueozvuzhjgjuu@resi.proxies.fo:1338"
+    "socks5://xvzujnavbogxtpybzc-country-BE-session-zlqzapck-package-residential:ptjwvueozvuzhjgjuu@resi.proxies.fo:1338",
+    "socks5://xvzujnavbogxtpybzc-country-BE-session-epz5rvru-package-residential:ptjwvueozvuzhjgjuu@resi.proxies.fo:1338",
+    "socks5://xvzujnavbogxtpybzc-country-BE-session-p7spmezj-package-residential:ptjwvueozvuzhjgjuu@resi.proxies.fo:1338"
   ]
 }

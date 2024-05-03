@@ -4,7 +4,7 @@ import { SocksProxyAgent } from 'socks-proxy-agent';
 import data from './data.json' assert {type: 'json'};
 
 const userIds = data.userIds;
-const proxy = data.proxies;
+const proxy = [];
 const userAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36';
 const url = 'wss://proxy.wynd.network:4650/';
 const reconnectInterval = 30;
@@ -27,7 +27,7 @@ const runProcess = async (userId, proxy = undefined) => {
   let deviceId = uuid();
   console.log(`[BOT:${userId}] connecting...`);
   let sendPing = undefined;
-  let client = new WebSocket(url, {
+  const client = new WebSocket(url, {
     headers: {
       'user-agent': userAgent,
     },
@@ -36,31 +36,30 @@ const runProcess = async (userId, proxy = undefined) => {
 
   client.on('error', (e) => {
     console.log(`[BOT:${userId}] stopped on error`);
-    console.log(`[BOT:${userId}] ${client?._closeMessage?.toString() ?? client?._req?.res?.statusMessage ?? ''}`);
     clearInterval(sendPing);
     client.close();
   });
 
   client.on('close', (e) => {
-    client?.terminate();
     console.log(`[BOT:${userId}] connection closed`);
     clearInterval(sendPing);
     console.log(`[BOT:${userId}] ${client?._closeMessage?.toString() ?? ''}`);
-    console.log(`[BOT:${userId}] reconnecting in ${reconnectInterval} seconds`);
+    console.log(`[BOT:${userId}] reconnecting in 30 seconds`);
     setTimeout(() => {
+      
       runProcess(userId, proxy);
     }, (reconnectInterval * 1000));
-    client = undefined;
   });
 
   client.on('open', (e) => {
     console.log(`[BOT:${userId}] connected`);
+    // client.close(); // uncomment this line when you received an error regarding reached device limit to force close the connection
   });
 
   client.on('message', function message(data) {
     try{
       const response = JSON.parse(data.toString());
-      // console.info(`[RCV:${userId}] ${data.toString()}`);
+      // console.info(`[RCV:${userId}] ${e.data}`);
       if(response.action === 'AUTH'){
         sendPing = setInterval(() => {
           try{
@@ -98,20 +97,15 @@ const runProcess = async (userId, proxy = undefined) => {
       console.error(`[BOT:${userId}] ${error}`);
     }
   });
-
-  return client;
 }
 
-if(proxy.length !== 0){
-  for(let i = 0; i < proxy.length; i += 1){
-    for(let k = 0; k < userIds.length; k += 1){
-      runProcess(userIds[k], proxy[i]);
+for(let i = 0; i < userIds.length; i += 1){
+  if(proxy.length !== 0){
+    for(let k = 0; k < proxy.length; k += 1){
+      runProcess(userIds[i], proxy[k]);
       await sleep(1);
     }
-    await sleep(30);
-  }
-} else {
-  for(let i = 0; i < userIds.length; i += 1){
+  } else {
     runProcess(userIds[i]);
     await sleep(1);
   }
