@@ -1,0 +1,6 @@
+{
+  "userIds": [],
+  "proxies": [
+    // format: socks5://user:pass@host:port
+  ]
+}
