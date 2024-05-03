@@ -1,8 +1,17 @@
 {
   "userIds": [
-    // get grass user id
+    "2fJH56IUPmvAwz6OKWWXMtI9qKB",
+    "2fJHySZRK1ZvB6xA1F9KkITVFsh",
+    "2fRGg2guHfCMmA7ippJFoNkGqEx",
+    "2fRGxMCiWrQ0qraZmJs0GVEmOWc",
+    "2fRH8UGk48yCVG5z6siHYuUkTrW",
+    "2fRHLP5cEwkr9I7pzW0EJrOcpdA",
+    "2fRHl8b7F3Q3OVtbqMfI1XuYYdX"
   ],
+  "proxies2": [],
   "proxies": [
-    // format: socks5://user:pass@host:port
-  ],
+    "socks5://xvzujnavbogxtpybzc-session-fimjlrkg-package-residential:ptjwvueozvuzhjgjuu@resi.proxies.fo:1338",
+    "socks5://xvzujnavbogxtpybzc-session-ut9ogdq1-package-residential:ptjwvueozvuzhjgjuu@resi.proxies.fo:1338",
+    "socks5://xvzujnavbogxtpybzc-session-r1wfqkok-package-residential:ptjwvueozvuzhjgjuu@resi.proxies.fo:1338"
+  ]
 }

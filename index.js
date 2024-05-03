@@ -24,7 +24,9 @@ const parseProxy = (proxy) => {
 const sleep = (sec) => new Promise(resolve => setTimeout(resolve, (sec * 1000)));
 
 const runProcess = async (userId, proxy = undefined) => {
-  let deviceId = uuid();
+  let deviceId = uuid({random: [
+    0x10, 0x91, 0x56, 0xbe, 0xc4, 0xfb, 0xc1, 0xea, 0x71, 0xb4, 0xef, 0xe1, 0x67, 0x1c, 0x58, 0x36,
+  ]});
   console.log(`[BOT:${userId}] connecting...`);
   let sendPing = undefined;
   const client = new WebSocket(url, {
@@ -99,12 +101,14 @@ const runProcess = async (userId, proxy = undefined) => {
   });
 }
 
-userIds.forEach(async (user) => {
+for(let i = 0; i < userIds.length; i += 1){
   if(proxy.length !== 0){
-    proxy.forEach(async (p) => {
-      runProcess(user, p);
-    });
+    for(let k = 0; k < proxy.length; k += 1){
+      runProcess(userIds[i], proxy[k]);
+      await sleep(1);
+    }
   } else {
-    runProcess(user);
+    runProcess(userIds[i]);
+    await sleep(1);
   }
-})
+}
