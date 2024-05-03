@@ -1,0 +1,8 @@
+{
+  "userIds": [
+    // get grass user id
+  ],
+  "proxies": [
+    // format: socks5://user:pass@host:port
+  ],
+}
