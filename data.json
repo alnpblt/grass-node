@@ -1,17 +1,6 @@
 {
-  "userIds": [
-    "2fJH56IUPmvAwz6OKWWXMtI9qKB",
-    "2fJHySZRK1ZvB6xA1F9KkITVFsh",
-    "2fRGg2guHfCMmA7ippJFoNkGqEx",
-    "2fRGxMCiWrQ0qraZmJs0GVEmOWc",
-    "2fRH8UGk48yCVG5z6siHYuUkTrW",
-    "2fRHLP5cEwkr9I7pzW0EJrOcpdA",
-    "2fRHl8b7F3Q3OVtbqMfI1XuYYdX"
-  ],
-  "proxies2": [],
+  "userIds": [],
   "proxies": [
-    "socks5://xvzujnavbogxtpybzc-country-BE-session-zlqzapck-package-residential:ptjwvueozvuzhjgjuu@resi.proxies.fo:1338",
-    "socks5://xvzujnavbogxtpybzc-country-BE-session-epz5rvru-package-residential:ptjwvueozvuzhjgjuu@resi.proxies.fo:1338",
-    "socks5://xvzujnavbogxtpybzc-country-BE-session-p7spmezj-package-residential:ptjwvueozvuzhjgjuu@resi.proxies.fo:1338"
+    // format: socks5://user:pass@host:port
   ]
 }
