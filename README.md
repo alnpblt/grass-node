@@ -10,7 +10,7 @@ npm install
 Set your user ids and proxies in data.json. Connecting via proxy is only available through socks protocol
 ```javascript
 {
-  user: [
+  userIds: [
     'user-id'
   ],
   proxies: [
